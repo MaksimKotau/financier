@@ -1,7 +1,7 @@
 import AccountType from "../enums/AccountType";
 
 export default interface AccountDTO {
-  id: number;
+  id: string;
   name: string;
   type: AccountType;
 }
