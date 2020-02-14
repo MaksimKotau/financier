@@ -4,7 +4,7 @@ import transactionCategories, {TransactionCategoryState} from './transactionCate
 import transactions, {TransactionState} from './transactionReducers';
 
 
-export default combineReducers({
+export default combineReducers<GlobalState, any>({
   accounts,
   transactionCategories,
   transactions
