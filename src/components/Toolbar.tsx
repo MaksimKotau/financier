@@ -8,6 +8,7 @@ const useStyles = makeStyles((theme: Theme) =>
             flex: 1,
             display: "flex",
             flexDirection: "row",
+            zIndex: theme.zIndex.drawer + 1,
         }
     }),
 );
