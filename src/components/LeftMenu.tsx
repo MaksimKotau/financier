@@ -3,7 +3,7 @@ import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import CategoryIcon from '@material-ui/icons/Category';
 import CreditCardIcon from '@material-ui/icons/CreditCard';
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const drawerWidth = 200;
 
@@ -12,7 +12,6 @@ const useStyles = makeStyles((theme: Theme) =>
         root: {
             display: 'flex',
         },
-
         drawer: {
             width: drawerWidth,
             flexShrink: 0,
@@ -31,6 +30,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const LeftMenu: React.FC = () => {
     const classes = useStyles();
+    const location = useLocation();
     return (
         <Drawer
             className={classes.drawer}
@@ -42,7 +42,7 @@ const LeftMenu: React.FC = () => {
             <div className={classes.toolbar} />
             <List>
                 <Link to="/accounts" className={classes.link}>
-                    <ListItem button key="Accounts">
+                    <ListItem button key="Accounts" selected={location.pathname === "/accounts"}>
                         <ListItemIcon>
                             <CreditCardIcon />
                         </ListItemIcon>
@@ -50,7 +50,7 @@ const LeftMenu: React.FC = () => {
                     </ListItem>
                 </Link>
                 <Link to="/categories"  className={classes.link}>
-                    <ListItem button key="Categories">
+                    <ListItem button key="Categories" selected={location.pathname === "/categories"}>
                         <ListItemIcon>
                             <CategoryIcon />
                         </ListItemIcon>
@@ -58,7 +58,7 @@ const LeftMenu: React.FC = () => {
                     </ListItem>
                 </Link>
                 <Link to="/transactions"  className={classes.link}>
-                    <ListItem button key="Transactions">
+                    <ListItem button key="Transactions" selected={location.pathname === "/transactions"}>
                         <ListItemIcon>
                             <AttachMoneyIcon />
                         </ListItemIcon>
