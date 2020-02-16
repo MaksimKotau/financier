@@ -1,6 +1,9 @@
+import { createStyles, Drawer, List, ListItem, ListItemIcon, ListItemText, makeStyles, Theme } from '@material-ui/core';
+import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
+import CategoryIcon from '@material-ui/icons/Category';
+import CreditCardIcon from '@material-ui/icons/CreditCard';
 import React from 'react';
-import { Drawer, List, ListItem, ListItemIcon, ListItemText, makeStyles, Theme, createStyles } from '@material-ui/core';
-import CreditCardIcon from '@material-ui/icons/CreditCard'
+import { Link } from 'react-router-dom';
 
 const drawerWidth = 200;
 
@@ -8,20 +11,21 @@ const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
             display: 'flex',
-          },
-          
-          drawer: {
+        },
+
+        drawer: {
             width: drawerWidth,
             flexShrink: 0,
-          },
-          drawerPaper: {
+        },
+        drawerPaper: {
             width: drawerWidth,
-          },
-          content: {
-            flexGrow: 1,
-            padding: theme.spacing(3),
-          },
-          toolbar: theme.mixins.toolbar,
+        },
+        toolbar: theme.mixins.toolbar,
+        link: {
+            whiteSpace: 'nowrap',
+            color: theme.palette.text.primary,
+            textDecoration: "none"
+        }
     }),
 );
 
@@ -37,14 +41,32 @@ const LeftMenu: React.FC = () => {
         >
             <div className={classes.toolbar} />
             <List>
-                <ListItem button key="Accounts">
-                    <ListItemIcon>
-                        <CreditCardIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Accounts" />
-                </ListItem>
+                <Link to="/accounts" className={classes.link}>
+                    <ListItem button key="Accounts">
+                        <ListItemIcon>
+                            <CreditCardIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Accounts"/>
+                    </ListItem>
+                </Link>
+                <Link to="/categories"  className={classes.link}>
+                    <ListItem button key="Categories">
+                        <ListItemIcon>
+                            <CategoryIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Categories" />
+                    </ListItem>
+                </Link>
+                <Link to="/transactions"  className={classes.link}>
+                    <ListItem button key="Transactions">
+                        <ListItemIcon>
+                            <AttachMoneyIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Transactions" />
+                    </ListItem>
+                </Link>
             </List>
-        </Drawer>
+        </Drawer >
     )
 }
 
