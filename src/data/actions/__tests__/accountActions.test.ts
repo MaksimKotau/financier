@@ -3,12 +3,14 @@ import AccountDTO from '../../DTO/AccountDTO';
 import AccountType from '../../enums/AccountType';
 import { setAddAccountAction, setDeleteAccountAction, setModifyAccountAction } from '../accountActions';
 import * as constants from '../actionTypes';
+import moment from 'moment';
 
 describe('Account actions', () => {
     const currentAccount: AccountDTO = {
         id: uuidv4(),
         name: "Work debit card",
-        type: AccountType.Debit
+        type: AccountType.Debit,
+        startBalance: 0,
     };
     it('creates an action to add new account', () => {
         const expectedAction = {type: constants.ADD_ACCOUNT, account: currentAccount};
