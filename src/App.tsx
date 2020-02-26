@@ -6,12 +6,27 @@ import LeftMenu from './components/LeftMenu';
 import Toolbar from './components/Toolbar';
 import rootReducer, { GlobalState } from './data/reducers';
 import MainView from './views/MainView'
-
+import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import * as Colors from '@material-ui/core/colors';
 const store = createStore<GlobalState, any, null, null>(rootReducer);
+
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: "#558b2f"
+    },
+    secondary: {
+      main: "#ff8f00"
+    }
+  },
+});
 
 const App: React.FC = () => {
   return (
     <Provider store={store}>
+      <ThemeProvider
+      theme={theme}
+    >
       <Router>
         <div style={{ display: "flex", width: "100%" }}>
           <Toolbar />
@@ -19,6 +34,7 @@ const App: React.FC = () => {
           <MainView />
         </div>
       </Router>
+      </ThemeProvider>
     </Provider>
   );
 }
