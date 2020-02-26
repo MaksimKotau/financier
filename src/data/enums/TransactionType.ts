@@ -1,6 +1,6 @@
 enum TransactionType {
-  Debit,
-  Credit,
+  Income,
+  Expenses,
 }
 
 export default TransactionType;
