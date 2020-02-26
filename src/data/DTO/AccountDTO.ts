@@ -4,4 +4,5 @@ export default interface AccountDTO {
   id: string;
   name: string;
   type: AccountType;
+  startBalance: number;
 }
