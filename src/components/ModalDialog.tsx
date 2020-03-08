@@ -5,7 +5,7 @@ interface OwnProps {
     title?: string;
     text: string;
     onApply: () => void;
-    onCancel: () => void;
+    onCancel?: () => void;
 }
 
 const ModalDialog: React.FC<OwnProps> = (props) => {
@@ -22,11 +22,11 @@ const ModalDialog: React.FC<OwnProps> = (props) => {
                 </DialogContentText>
             </DialogContent>
             <DialogActions>
-                <Button onClick={props.onCancel} color="primary">
-                    Disagree
-                </Button>
+                {props.onCancel && <Button onClick={props.onCancel} color="primary">
+                    Cancel
+                </Button>}
                 <Button onClick={props.onApply} color="primary">
-                    Agree
+                    Ok
                 </Button>
             </DialogActions>
         </Dialog>
