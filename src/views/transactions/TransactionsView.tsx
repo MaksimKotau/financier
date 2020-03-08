@@ -14,6 +14,12 @@ import TransactionDTO from '../../data/DTO/TransactionDTO';
 import { GlobalState } from '../../data/reducers';
 import TransactionForm from './TransactionForm';
 import ModalDialog from '../../components/ModalDialog';
+import GroupingIcon from '@material-ui/icons/KeyboardArrowRight';
+import MultiActions from '../../components/MultiActions';
+import MoveMoneyIcon from '@material-ui/icons/SyncAlt';
+import TransactionIcon from '@material-ui/icons/Payment';
+import MoveTransactionForm from './MoveTransactionForm';
+import TransactionType from '../../data/enums/TransactionType';
 
 interface TransactionViewType {
     id: string;
@@ -21,6 +27,7 @@ interface TransactionViewType {
     date: string;
     value: number;
     category: string;
+    categoryType: string;
     account: string;
     description: string;
 }
@@ -38,6 +45,7 @@ const TransactionView: React.FC = () => {
     const dispatch = useDispatch();
     const [selectedID, setSelectedID] = useState<string>("")
     const [formOpen, setFormOpen] = useState<boolean>(false);
+    const [moveFormOpen, setMoveFormOpen] = useState<boolean>(false);
     const [deleteTransaction, setDeleteTransaction] = useState<TransactionDTO | undefined>(undefined);
     const allTransactions = useSelector((state: GlobalState) => state.transactions.map(el => {
         const foundCategory = state.transactionCategories.find(cat => cat.id === el.transactionCategoryID);
@@ -49,7 +57,9 @@ const TransactionView: React.FC = () => {
             date: el.date,
             value: el.value,
             category: foundCategory ? foundCategory.name : "",
-            account: foundAccount ? foundAccount.name : ""
+            account: foundAccount ? foundAccount.name : "",
+            categoryType: foundCategory ? TransactionType[foundCategory.type] : ""
+            
         } as TransactionViewType
     }));
     const onCancel = () => {
@@ -63,11 +73,15 @@ const TransactionView: React.FC = () => {
     const openForm = () => {
         setFormOpen(true);
     }
+    const openMoveForm = () => {
+        setMoveFormOpen(true)
+    }
     return (
         <div className={classes.container}>
             <MaterialTable
                 columns={[
-                    { field: "category", title: "Category" },
+                    { field: "categoryType", title: "Category type", defaultGroupOrder: 0 },
+                    { field: "category", title: "Category", defaultGroupOrder: 1 },
                     { field: "account", title: "Wallet" },
                     { field: "name", title: "Name" },
                     { field: "value", title: "Type" },
@@ -103,13 +117,33 @@ const TransactionView: React.FC = () => {
                     Filter: forwardRef((props, ref) => <FilterIcon {...props} ref={ref} />),
                     Search:forwardRef((props, ref) => <SearchIcon {...props} ref={ref} />),
                     ResetSearch:forwardRef((props, ref) => <ClearIcon {...props} ref={ref} />),
-                    SortArrow:forwardRef((props, ref) => <SortIcon {...props} ref={ref} />)
+                    SortArrow:forwardRef((props, ref) => <SortIcon {...props} ref={ref} />),
+                    DetailPanel:forwardRef((props, ref) => <GroupingIcon {...props} ref={ref} />)
                 }}
             />
-            <AddButton onClick={openForm} />
+            {/* <AddButton onClick={openForm} /> */}
+                <MultiActions 
+                    elements={
+                        [
+                            {
+                                name: "Move money",
+                                icon: <MoveMoneyIcon/>,
+                                action: openMoveForm
+                            },
+                            {
+                                name: "New transaction",
+                                icon: <TransactionIcon />,
+                                action: openForm
+                            }
+                        ]
+                    }
+                />
              {formOpen && <TransactionForm
                 onCancel={onCancel}
                 id={selectedID}
+            />}
+            { moveFormOpen && <MoveTransactionForm
+                onCancel = {() => setMoveFormOpen(false)}
             />}
             {deleteTransaction &&
                 <ModalDialog

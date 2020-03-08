@@ -1,4 +1,4 @@
-import { Button, createStyles, Dialog, DialogActions, DialogContent, DialogTitle, makeStyles, MenuItem, TextField, Theme, Typography } from '@material-ui/core';
+import { Button, createStyles, Dialog, DialogActions, DialogContent, DialogTitle, makeStyles, MenuItem, TextField, Theme } from '@material-ui/core';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import uuidv4 from 'uuid/v4';
@@ -6,6 +6,7 @@ import { addTransactionCategory, modifyTransactionCategory } from '../../data/ac
 import TransactionCategoryDTO from '../../data/DTO/TransactionCategoryDTO';
 import TransactionType from '../../data/enums/TransactionType';
 import { GlobalState } from '../../data/reducers';
+import { isPossibleToDeleteTransactionCategory } from '../../services/balanceService';
 import { enumToarray } from '../../services/enumToArray';
 
 interface OwnProps {
@@ -13,11 +14,16 @@ interface OwnProps {
     onCancel: () => void;
 }
 
+interface Errors {
+    name: string;
+    type: string;
+    description: string;
+}
+
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         container: {
-            width: 300,
-            height: 300
+            width: 400
         },
         paddingBlock: {
             padding: 15
@@ -39,6 +45,10 @@ interface StateProps {
 const CategoryForm: React.FC<OwnProps & StateProps> = (props) => {
     const classes = useStyles();
     const dispatch = useDispatch();
+    const [canApply, setCanApply] = useState<boolean>(false);
+    const [errors, setErrors] = useState<Errors>({ description: "", name: "", type: "" });
+    const [validate, setValidate] = useState<boolean>(false);
+    const allCategoriesNames: string[] = useSelector((state: GlobalState) => state.transactionCategories.map(el => el.name));
     const { stateCategory } = useSelector((state: GlobalState) => {
         const foundCategory = state.transactionCategories.find(el => el.id === props.id);
         return {
@@ -52,7 +62,10 @@ const CategoryForm: React.FC<OwnProps & StateProps> = (props) => {
         if (stateCategory) {
             setSelectedCategory({ ...stateCategory })
         }
+        setValidate(true);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
 
     const modify = (name: keyof TransactionCategoryDTO, value: any) => {
         setSelectedCategory({ ...selectedCategory, [name]: value })
@@ -68,14 +81,33 @@ const CategoryForm: React.FC<OwnProps & StateProps> = (props) => {
         props.onCancel();
     }
     const onCancel = () => props.onCancel();
+
+    useEffect(() => {
+        if (validate) {
+            if (selectedCategory.name.length === 0) {
+                setErrors({ ...errors, name: "Field is required" })
+            } else if (allCategoriesNames.includes(selectedCategory.name)) {
+                setErrors({ ...errors, name: "Category name is not unique" })
+            }
+            else {
+                setErrors({ ...errors, name: "" })
+            }
+        }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectedCategory.name, selectedCategory.description, selectedCategory.type])
+    useEffect(() => {
+        if (validate)
+            setCanApply(errors.name.length === 0 && errors.description.length === 0 && errors.type.length === 0);
+    }, [selectedCategory.name, selectedCategory.description, selectedCategory.type, errors.name, errors.type, errors.description])
     return (
         <Dialog
             open
         >
-            <DialogTitle>
-                <Typography variant="h6" className={classes.header}>
+            <DialogTitle className={classes.header}>
+                <div className={classes.container}>
                     {props.id ? "Modify category" : "Add new category"}
-                </Typography>
+                </div>
             </DialogTitle>
             <DialogContent>
                 <div className={classes.paddingBlock}>
@@ -84,6 +116,8 @@ const CategoryForm: React.FC<OwnProps & StateProps> = (props) => {
                         fullWidth
                         value={selectedCategory.name}
                         onChange={(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => modify('name', e.target.value)}
+                        error={errors.name.length > 0}
+                        helperText={errors.name.length > 0 ? errors.name : undefined}
                     />
                 </div>
                 <div className={classes.paddingBlock}>
@@ -93,8 +127,9 @@ const CategoryForm: React.FC<OwnProps & StateProps> = (props) => {
                         value={selectedCategory.type}
                         select
                         onChange={(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => modify('type', e.target.value)}
+                        disabled={!isPossibleToDeleteTransactionCategory(selectedCategory.id)}
                     >
-                        {enumToarray(TransactionType).map(el => {
+                        {enumToarray(TransactionType).filter(en => en.name !== "Moving").map(el => {
                             return (
                                 <MenuItem key={el.name} value={el.value}>{el.name}</MenuItem>
                             )
@@ -125,6 +160,7 @@ const CategoryForm: React.FC<OwnProps & StateProps> = (props) => {
                         onClick={onApply}
                         variant="contained"
                         color="primary"
+                        disabled={!canApply}
                     >
                         Apply
                             </Button>

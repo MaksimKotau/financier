@@ -11,10 +11,12 @@ import ClearIcon from '@material-ui/icons/Clear';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterIcon from '@material-ui/icons/FilterList';
 import SearchIcon from '@material-ui/icons/Search';
+import GroupingIcon from '@material-ui/icons/KeyboardArrowRight';
 import ModalDialog from '../../components/ModalDialog';
 import AccountDTO from '../../data/DTO/AccountDTO';
 import {deleteAccount as delteCurrentAccount} from '../../data/actions/accountActions';
 import SortIcon from '@material-ui/icons/ArrowUpward';
+import {calculateCurrentBalance, isPossibleToDeleteAccount} from '../../services/balanceService';
 
 interface AccountViewType {
     id: string;
@@ -38,13 +40,14 @@ const AccountView: React.FC = () => {
     const [selectedID, setSelectedID] = useState<string>("")
     const [formOpen, setFormOpen] = useState<boolean>(false);
     const [deleteAccount, setDeleteAccount] = useState<AccountDTO | undefined>(undefined);
+    const [cantDeleteAccount, setCantDeleteAccount] = useState<boolean>(false);
     const allAccounts = useSelector((state: GlobalState) => state.accounts.map(el => {
         return {
             id: el.id,
             name: el.name,
             type: AccountType[el.type],
             startBalance: el.startBalance,
-            currentBalance: 0
+            currentBalance: calculateCurrentBalance(el.id)
         }
     }));
     const onCancel = () => {
@@ -58,12 +61,19 @@ const AccountView: React.FC = () => {
     const openForm = () => {
         setFormOpen(true);
     }
+    const onAskToDelete = (rowData: AccountDTO) => {
+        if(isPossibleToDeleteAccount(rowData.id)){
+            setDeleteAccount(rowData);
+        }else {
+            setCantDeleteAccount(true);
+        }
+    }
     return (
         <div className={classes.container}>
             <MaterialTable
                 columns={[
+                    { field: "type", title: "Type", defaultGroupOrder: 0 },
                     { field: "name", title: "Name" },
-                    { field: "type", title: "Type" },
                     { field: "currentBalance", title: "Current balance"}
                 ]}
                 data={allAccounts}
@@ -81,7 +91,7 @@ const AccountView: React.FC = () => {
                         icon: () => <DeleteIcon color="action"/>,
                         tooltip: 'Delete Wallet',
                         onClick: (event, rowData) => {
-                            setDeleteAccount(rowData as unknown as AccountDTO);
+                            onAskToDelete(rowData as unknown as AccountDTO);
                         }
                     },
                 ]}
@@ -90,12 +100,14 @@ const AccountView: React.FC = () => {
                     paging: false,
                     actionsColumnIndex: -1,
                     filtering: true,
+                    grouping: true
                 }}
                 icons={{
                     Filter: forwardRef((props, ref) => <FilterIcon {...props} ref={ref} />),
                     Search:forwardRef((props, ref) => <SearchIcon {...props} ref={ref} />),
                     ResetSearch:forwardRef((props, ref) => <ClearIcon {...props} ref={ref} />),
-                    SortArrow:forwardRef((props, ref) => <SortIcon {...props} ref={ref} />)
+                    SortArrow:forwardRef((props, ref) => <SortIcon {...props} ref={ref} />),
+                    DetailPanel:forwardRef((props, ref) => <GroupingIcon {...props} ref={ref} />)
                 }}
             />
             <AddButton onClick={openForm} />
@@ -110,6 +122,13 @@ const AccountView: React.FC = () => {
                     onApply={() => onDelete(deleteAccount.id)}
                     onCancel={() => setDeleteAccount(undefined)}
                 />}
+            {cantDeleteAccount && 
+                <ModalDialog
+                title="Delete wallet"
+                text={`You cannot delete this wallet because it is associated with one or more transactions`}
+                onApply={() => setCantDeleteAccount(false)}
+            />
+            }
         </div>
     )
 }

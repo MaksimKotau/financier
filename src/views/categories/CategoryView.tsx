@@ -15,6 +15,8 @@ import TransactionType from '../../data/enums/TransactionType';
 import { GlobalState } from '../../data/reducers';
 import CategoryForm from './CategoryForm';
 import ModalDialog from '../../components/ModalDialog';
+import GroupingIcon from '@material-ui/icons/KeyboardArrowRight';
+import { isPossibleToDeleteTransactionCategory } from '../../services/balanceService';
 
 interface CategoryViewType {
     id: string;
@@ -37,14 +39,17 @@ const CategoryView: React.FC = () => {
     const [selectedID, setSelectedID] = useState<string>("")
     const [formOpen, setFormOpen] = useState<boolean>(false);
     const [deleteCategory, setDeleteCategory] = useState<TransactionCategoryDTO | undefined>(undefined);
-    const allCategories = useSelector((state: GlobalState) => state.transactionCategories.map(el => {
-        return {
-            id: el.id,
-            name: el.name,
-            type: TransactionType[el.type],
-            description: el.description
-        }
-    }));
+    const [cantDeleteCategory, setCantDeleteCategory] = useState<boolean>(false);
+    const allCategories = useSelector((state: GlobalState) => state.transactionCategories
+        .filter(c => c.type !== TransactionType.TransitExpenses && c.type !== TransactionType.TransitIncome)
+        .map(el => {
+            return {
+                id: el.id,
+                name: el.name,
+                type: TransactionType[el.type],
+                description: el.description
+            }
+        }));
     const onCancel = () => {
         setFormOpen(false);
         setSelectedID("")
@@ -56,19 +61,26 @@ const CategoryView: React.FC = () => {
     const openForm = () => {
         setFormOpen(true);
     }
+    const onAskToDelete = (rowData: TransactionCategoryDTO) => {
+        if (isPossibleToDeleteTransactionCategory(rowData.id)) {
+            setDeleteCategory(rowData);
+        } else {
+            setCantDeleteCategory(true);
+        }
+    }
     return (
         <div className={classes.container}>
             <MaterialTable
                 columns={[
+                    { field: "type", title: "Type", defaultGroupOrder: 0 },
                     { field: "name", title: "Name" },
-                    { field: "type", title: "Type" },
-                    { field: "description", title: "Description"}
+                    { field: "description", title: "Description" }
                 ]}
                 data={allCategories}
                 title="Categories"
                 actions={[
                     {
-                        icon: () => <EditIcon color="action"/>,
+                        icon: () => <EditIcon color="action" />,
                         tooltip: 'Modify Category',
                         onClick: (event, rowData) => {
                             setSelectedID((rowData as CategoryViewType).id)
@@ -76,24 +88,25 @@ const CategoryView: React.FC = () => {
                         }
                     },
                     {
-                        icon: () => <DeleteIcon color="action"/>,
+                        icon: () => <DeleteIcon color="action" />,
                         tooltip: 'Delete Category',
                         onClick: (event, rowData) => {
-                            setDeleteCategory(rowData as unknown as TransactionCategoryDTO);
+                            onAskToDelete(rowData as unknown as TransactionCategoryDTO);
                         }
                     },
                 ]}
-                options={{ 
-                    sorting: true, 
+                options={{
+                    sorting: true,
                     paging: false,
                     actionsColumnIndex: -1,
                     filtering: true,
                 }}
                 icons={{
                     Filter: forwardRef((props, ref) => <FilterIcon {...props} ref={ref} />),
-                    Search:forwardRef((props, ref) => <SearchIcon {...props} ref={ref} />),
-                    ResetSearch:forwardRef((props, ref) => <ClearIcon {...props} ref={ref} />),
-                    SortArrow:forwardRef((props, ref) => <SortIcon {...props} ref={ref} />)
+                    Search: forwardRef((props, ref) => <SearchIcon {...props} ref={ref} />),
+                    ResetSearch: forwardRef((props, ref) => <ClearIcon {...props} ref={ref} />),
+                    SortArrow: forwardRef((props, ref) => <SortIcon {...props} ref={ref} />),
+                    DetailPanel: forwardRef((props, ref) => <GroupingIcon {...props} ref={ref} />)
                 }}
             />
             <AddButton onClick={openForm} />
@@ -108,6 +121,13 @@ const CategoryView: React.FC = () => {
                     onApply={() => onDelete(deleteCategory.id)}
                     onCancel={() => setDeleteCategory(undefined)}
                 />}
+            {cantDeleteCategory &&
+                <ModalDialog
+                    title="Delete Category"
+                    text={`You cannot delete this category because it is associated with one or more transactions`}
+                    onApply={() => setCantDeleteCategory(false)}
+                />
+            }
         </div>
     )
 }
