@@ -1,9 +1,22 @@
 import { ADD_TRANSACTION_CATEGORY, DELETE_TRANSACTION_CATEGORY, MODIFY_TRANSACTION_CATEGORY } from "../actions/actionTypes";
 import { AddTransactionCategoryAction, DeleteTransactionCategoryAction, ModifyTransactionCategoryAction } from '../actions/transactionCategoryActions';
 import TransactionCategoryDTO from "../DTO/TransactionCategoryDTO";
+import uuidv4 from 'uuid/v4';
+import TransactionType from "../enums/TransactionType";
 
 
-const initialState: TransactionCategoryState = []
+const initialState: TransactionCategoryState = [
+    {
+        id: uuidv4(),
+        name: "Transit Expenses",
+        type: TransactionType.TransitExpenses,
+    },
+    {
+        id: uuidv4(),
+        name: "Transit Inome",
+        type: TransactionType.TransitIncome,
+    },
+]
 
 type ActionType = AddTransactionCategoryAction | ModifyTransactionCategoryAction | DeleteTransactionCategoryAction;
 const ensureNever = (action: never) => action;
