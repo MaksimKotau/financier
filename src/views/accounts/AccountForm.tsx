@@ -109,16 +109,6 @@ const AccountForm: React.FC<OwnProps & StateProps> = (props) => {
             <DialogContent>
                 <div className={classes.paddingBlock}>
                     <TextField
-                        label="Wallet name"
-                        fullWidth
-                        value={selectedAccount.name}
-                        onChange={(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => modify('name', e.target.value)}
-                        error={errors.name.length > 0}
-                        helperText={errors.name.length > 0 ? errors.name : undefined}
-                    />
-                </div>
-                <div className={classes.paddingBlock}>
-                    <TextField
                         label="Wallet Type"
                         fullWidth
                         value={selectedAccount.type}
@@ -132,6 +122,16 @@ const AccountForm: React.FC<OwnProps & StateProps> = (props) => {
                             )
                         })}
                     </TextField>
+                </div>
+                <div className={classes.paddingBlock}>
+                    <TextField
+                        label="Wallet name"
+                        fullWidth
+                        value={selectedAccount.name}
+                        onChange={(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => modify('name', e.target.value)}
+                        error={errors.name.length > 0}
+                        helperText={errors.name.length > 0 ? errors.name : undefined}
+                    />
                 </div>
                 <div className={classes.paddingBlock}>
                     <TextField

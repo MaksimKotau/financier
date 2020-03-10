@@ -112,16 +112,6 @@ const CategoryForm: React.FC<OwnProps & StateProps> = (props) => {
             <DialogContent>
                 <div className={classes.paddingBlock}>
                     <TextField
-                        label="Category name"
-                        fullWidth
-                        value={selectedCategory.name}
-                        onChange={(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => modify('name', e.target.value)}
-                        error={errors.name.length > 0}
-                        helperText={errors.name.length > 0 ? errors.name : undefined}
-                    />
-                </div>
-                <div className={classes.paddingBlock}>
-                    <TextField
                         label="Category Type"
                         fullWidth
                         value={selectedCategory.type}
@@ -129,12 +119,22 @@ const CategoryForm: React.FC<OwnProps & StateProps> = (props) => {
                         onChange={(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => modify('type', e.target.value)}
                         disabled={!isPossibleToDeleteTransactionCategory(selectedCategory.id)}
                     >
-                        {enumToarray(TransactionType).filter(en => en.name !== "Moving").map(el => {
+                        {enumToarray(TransactionType).filter(en => en.name !== "TransitIncome" && en.name !== "TransitExpenses").map(el => {
                             return (
                                 <MenuItem key={el.name} value={el.value}>{el.name}</MenuItem>
                             )
                         })}
                     </TextField>
+                </div>
+                <div className={classes.paddingBlock}>
+                    <TextField
+                        label="Category name"
+                        fullWidth
+                        value={selectedCategory.name}
+                        onChange={(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => modify('name', e.target.value)}
+                        error={errors.name.length > 0}
+                        helperText={errors.name.length > 0 ? errors.name : undefined}
+                    />
                 </div>
                 <div className={classes.paddingBlock}>
                     <TextField

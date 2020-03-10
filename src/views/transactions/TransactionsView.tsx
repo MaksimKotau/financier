@@ -47,21 +47,28 @@ const TransactionView: React.FC = () => {
     const [formOpen, setFormOpen] = useState<boolean>(false);
     const [moveFormOpen, setMoveFormOpen] = useState<boolean>(false);
     const [deleteTransaction, setDeleteTransaction] = useState<TransactionDTO | undefined>(undefined);
-    const allTransactions = useSelector((state: GlobalState) => state.transactions.map(el => {
-        const foundCategory = state.transactionCategories.find(cat => cat.id === el.transactionCategoryID);
-        const foundAccount = state.accounts.find(acc => acc.id === el.accountID);
-        return {
-            id: el.id,
-            name: el.name,
-            description: el.description,
-            date: el.date,
-            value: el.value,
-            category: foundCategory ? foundCategory.name : "",
-            account: foundAccount ? foundAccount.name : "",
-            categoryType: foundCategory ? TransactionType[foundCategory.type] : ""
-            
-        } as TransactionViewType
-    }));
+    const allTransactions = useSelector((state: GlobalState) => {
+        const transitIncomeCategory = state.transactionCategories.find(el => el.type === TransactionType.TransitIncome);
+        const transitExpensesCategory = state.transactionCategories.find(el => el.type === TransactionType.TransitExpenses);
+        const expensCategoryID = transitExpensesCategory ? transitExpensesCategory.id : "0";
+        const incomeCategoryID = transitIncomeCategory ? transitIncomeCategory.id : "0";
+        return state.transactions.filter(t => t.transactionCategoryID !== expensCategoryID && t.transactionCategoryID !== incomeCategoryID)
+            .map(el => {
+                const foundCategory = state.transactionCategories.find(cat => cat.id === el.transactionCategoryID);
+                const foundAccount = state.accounts.find(acc => acc.id === el.accountID);
+                return {
+                    id: el.id,
+                    name: el.name,
+                    description: el.description,
+                    date: el.date,
+                    value: el.value,
+                    category: foundCategory ? foundCategory.name : "",
+                    account: foundAccount ? foundAccount.name : "",
+                    categoryType: foundCategory ? TransactionType[foundCategory.type] : ""
+
+                } as TransactionViewType
+            })
+    });
     const onCancel = () => {
         setFormOpen(false);
         setSelectedID("")
@@ -86,13 +93,13 @@ const TransactionView: React.FC = () => {
                     { field: "name", title: "Name" },
                     { field: "value", title: "Type" },
                     { field: "date", title: "Date" },
-                    { field: "description", title: "Description"}
+                    { field: "description", title: "Description" }
                 ]}
                 data={allTransactions}
                 title="Transactions"
                 actions={[
                     {
-                        icon: () => <EditIcon color="action"/>,
+                        icon: () => <EditIcon color="action" />,
                         tooltip: 'Modify Transaction',
                         onClick: (event, rowData) => {
                             setSelectedID((rowData as TransactionViewType).id)
@@ -100,50 +107,49 @@ const TransactionView: React.FC = () => {
                         }
                     },
                     {
-                        icon: () => <DeleteIcon color="action"/>,
+                        icon: () => <DeleteIcon color="action" />,
                         tooltip: 'Delete Transaction',
                         onClick: (event, rowData) => {
                             setDeleteTransaction(rowData as unknown as TransactionDTO);
                         }
                     },
                 ]}
-                options={{ 
-                    sorting: true, 
+                options={{
+                    sorting: true,
                     paging: false,
                     actionsColumnIndex: -1,
                     filtering: true,
                 }}
                 icons={{
                     Filter: forwardRef((props, ref) => <FilterIcon {...props} ref={ref} />),
-                    Search:forwardRef((props, ref) => <SearchIcon {...props} ref={ref} />),
-                    ResetSearch:forwardRef((props, ref) => <ClearIcon {...props} ref={ref} />),
-                    SortArrow:forwardRef((props, ref) => <SortIcon {...props} ref={ref} />),
-                    DetailPanel:forwardRef((props, ref) => <GroupingIcon {...props} ref={ref} />)
+                    Search: forwardRef((props, ref) => <SearchIcon {...props} ref={ref} />),
+                    ResetSearch: forwardRef((props, ref) => <ClearIcon {...props} ref={ref} />),
+                    SortArrow: forwardRef((props, ref) => <SortIcon {...props} ref={ref} />),
+                    DetailPanel: forwardRef((props, ref) => <GroupingIcon {...props} ref={ref} />)
                 }}
             />
-            {/* <AddButton onClick={openForm} /> */}
-                <MultiActions 
-                    elements={
-                        [
-                            {
-                                name: "Move money",
-                                icon: <MoveMoneyIcon/>,
-                                action: openMoveForm
-                            },
-                            {
-                                name: "New transaction",
-                                icon: <TransactionIcon />,
-                                action: openForm
-                            }
-                        ]
-                    }
-                />
-             {formOpen && <TransactionForm
+            <MultiActions
+                elements={
+                    [
+                        {
+                            name: "Move money",
+                            icon: <MoveMoneyIcon />,
+                            action: openMoveForm
+                        },
+                        {
+                            name: "New transaction",
+                            icon: <TransactionIcon />,
+                            action: openForm
+                        }
+                    ]
+                }
+            />
+            {formOpen && <TransactionForm
                 onCancel={onCancel}
                 id={selectedID}
             />}
-            { moveFormOpen && <MoveTransactionForm
-                onCancel = {() => setMoveFormOpen(false)}
+            {moveFormOpen && <MoveTransactionForm
+                onCancel={() => setMoveFormOpen(false)}
             />}
             {deleteTransaction &&
                 <ModalDialog

@@ -8,6 +8,7 @@ import AccountDTO from '../../data/DTO/AccountDTO';
 import TransactionCategoryDTO from '../../data/DTO/TransactionCategoryDTO';
 import TransactionDTO from '../../data/DTO/TransactionDTO';
 import { GlobalState } from '../../data/reducers';
+import TransactionType from '../../data/enums/TransactionType';
 
 interface OwnProps {
     id?: string;
@@ -92,7 +93,7 @@ const TransactionForm: React.FC<OwnProps & StateProps> = (props) => {
                             select
                             onChange={(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => modify('transactionCategoryID', e.target.value)}
                         >
-                            {allCategories.map(el => {
+                            {allCategories.filter(t => t.type !== TransactionType.TransitExpenses && t.type !== TransactionType.TransitIncome).map(el => {
                                 return (
                                     <MenuItem key={el.name} value={el.id}>{el.name}</MenuItem>
                                 )
