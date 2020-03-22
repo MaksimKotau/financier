@@ -4,6 +4,7 @@ import { Route, Switch } from "react-router-dom";
 import AccountView from './accounts/AccountView';
 import CategoryView from './categories/CategoryView';
 import TransactionsView from './transactions/TransactionsView';
+import Dashboard from './dashboard/Dashboard';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -34,6 +35,9 @@ const MainView: React.FC = () => {
           </Route>
           <Route path="/transactions">
             <TransactionsView />
+          </Route>
+          <Route path="/analytics">
+            <Dashboard />
           </Route>
         </Switch>
       </div>

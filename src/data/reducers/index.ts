@@ -4,6 +4,7 @@ import storage from 'redux-persist/lib/storage';
 import accounts, { AccountState } from './accountReducers';
 import transactionCategories, { TransactionCategoryState } from './transactionCategoryReducers';
 import transactions, { TransactionState } from './transactionReducers';
+import dashboard, { DashboardState } from './dashboardReducers';
 
 const rootPersistConfig = {
   key: 'root',
@@ -16,13 +17,15 @@ export interface GlobalState {
   readonly accounts: AccountState;
   readonly transactionCategories: TransactionCategoryState;
   readonly transactions: TransactionState;
+  readonly dashboard: DashboardState;
 }
 
 
 export const rootReducer =  combineReducers<GlobalState, any>({
   accounts,
   transactionCategories,
-  transactions
+  transactions,
+  dashboard
 } as any)
 
 const persistedReducer = persistReducer(rootPersistConfig, rootReducer)

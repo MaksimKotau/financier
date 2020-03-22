@@ -2,6 +2,7 @@ import { createStyles, Drawer, List, ListItem, ListItemIcon, ListItemText, makeS
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import CategoryIcon from '@material-ui/icons/Category';
 import CreditCardIcon from '@material-ui/icons/CreditCard';
+import BarChartIcon from '@material-ui/icons/BarChart';
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -63,6 +64,14 @@ const LeftMenu: React.FC = () => {
                             <AttachMoneyIcon />
                         </ListItemIcon>
                         <ListItemText primary="Transactions" />
+                    </ListItem>
+                </Link>
+                <Link to="/analytics"  className={classes.link}>
+                    <ListItem button key="Charts_Expenses" selected={location.pathname === "/analytics"}>
+                        <ListItemIcon>
+                            <BarChartIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Analytics" />
                     </ListItem>
                 </Link>
             </List>
