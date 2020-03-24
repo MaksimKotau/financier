@@ -23,6 +23,7 @@ const CardBase: React.FC<OwnProps> = (props) => {
             <WidgetMenu
                 anchorEl={anchorEl}
                 onClose={onClose}
+                id={props.id}
             />
             <Card style={{ height: '100%', width: "100%" }}>
                 <CardContent style={{ height: "calc(100% - 40px)" }}>

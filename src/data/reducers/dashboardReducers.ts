@@ -22,6 +22,7 @@ type ActionType = AddWidgetAction | RemoveWidgetAction | SaveDashboardLayoutActi
 const ensureNever = (action: never) => action;
 
 export default function (state: DashboardState = initialState, action: ActionType): DashboardState {
+    let layouts: any = {};
     switch (action.type) {
         case SAVE_DASHBOARD_LAYOUT:
             return {
@@ -29,7 +30,7 @@ export default function (state: DashboardState = initialState, action: ActionTyp
                 layouts: action.layouts,
             }
         case ADD_WIDGET:
-            let layouts: any = {};
+            layouts = {};
             for (let currBreakPoint of availableLayoutBreakpoint) {
                 layouts[currBreakPoint] = [
                     ...(state.layouts as any)[currBreakPoint],

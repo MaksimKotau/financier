@@ -2,13 +2,18 @@ import React from 'react';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import { ListItemText } from '@material-ui/core';
+import { useDispatch } from 'react-redux';
+import {removeWidget} from '../../../data/actions/dashboardActions';
 
 interface OwnProps {
     anchorEl: HTMLElement | null;
     onClose: () => void;
+    id: string;
 }
 
 const WidgetMenu: React.FC<OwnProps> = (props) => {
+    const dispatch = useDispatch();
+    const deleteWidget = () => removeWidget(props.id)(dispatch);
     return (
         <Menu
             open={Boolean(props.anchorEl)}
@@ -24,7 +29,7 @@ const WidgetMenu: React.FC<OwnProps> = (props) => {
             }}
             getContentAnchorEl={null}
         >
-            <MenuItem>
+            <MenuItem onClick={deleteWidget}>
                 <ListItemText primary="Delete" />
             </MenuItem>
         </Menu>
