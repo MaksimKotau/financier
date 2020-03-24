@@ -1,9 +1,10 @@
-import moment from 'moment';
+import moment, { months } from 'moment';
 import AccountDTO from "../data/DTO/AccountDTO";
 import TransactionDTO from "../data/DTO/TransactionDTO";
 import AccountType from "../data/enums/AccountType";
 import TransactionType from "../data/enums/TransactionType";
 import { GlobalState, store } from '../data/reducers';
+import _ from 'lodash';
 
 export const calculateCurrentBalance = (accountID: string): number => {
     const state: GlobalState = (store as any).getState();
@@ -56,27 +57,48 @@ export const getAllExpensesByCategories = (startDate: string, endDate: string): 
     return result;
 }
 
-export const getAllExpensesByCategoriesMonthly = (startDate: string, endDate: string): { categoryName: string, values: number[] }[] => {
-    let result: { categoryName: string, values: number[] }[] = [];
+interface DataRawsPeriodically {
+    labels: string[];
+    datasets: {
+        label: string,
+        data: number[]
+    }[]
+}
+
+export const getAllExpensesByCategoriesMonthly = (startDate: string, endDate: string): DataRawsPeriodically => {
+    let result: DataRawsPeriodically = {
+        labels: [],
+        datasets: []
+    };
     if (!moment(startDate).isValid() || !moment(endDate).isValid() || (moment(endDate).isBefore(moment(startDate))))
         return result;
     const state: GlobalState = (store as any).getState();
     const allExpensesCategories = state.transactionCategories.filter(c => c.type === TransactionType.Expenses);
+    const labels: string[] = getMonthsRange(startDate, endDate);
     allExpensesCategories.forEach(c => {
         const allExpenses = state.transactions.filter(t =>
             t.transactionCategoryID === c.id &&
-            moment(t.date).isSameOrAfter(moment(startDate).startOf('day')) &&
-            moment(t.date).isSameOrBefore(moment(endDate).endOf('day'))
+            moment(t.date).isSameOrAfter(moment(startDate).startOf('month')) &&
+            moment(t.date).isSameOrBefore(moment(endDate).endOf('month'))
         );
-        const gruppedExpenses = allExpenses.map(el => {
-            return {
-                value: el.value,
-                month: moment(el.date).format("")
-
-            }
+        const data: number[] = [];
+        labels.forEach(l => {
+            const dateTransactions = allExpenses.filter(el => _.isEqual(moment(el.date).format('MMM YYYY'), l))
+            const summTransactions = dateTransactions.map(el => el.value).reduce((a, b) => a + b, 0);
+            data.push(summTransactions);
         })
-        // const summ = allExpenses.map(el => el.value).reduce((a, b) => a + b, 0)
-        // result.push({ categoryName: c.name, value: summ });
-    })
+        result.datasets = [...result.datasets, {label: c.name, data}]
+    });
+    result.labels = labels;
+    return result;
+}
+
+export const getMonthsRange = (startDate: string, endDate: string): string[] => {
+    const startFormattedDate: string = moment(startDate).format("MMM YYYY")
+    const endFormattedDate: string = moment(endDate).format("MMM YYYY")
+    const result: string[] = [];
+    for (let m = moment(startFormattedDate, "MMM YYYY").startOf('month'); m.isSameOrBefore(moment(endFormattedDate, "MMM YYYY").endOf('month')); m.add(1, 'month')) {
+        result.push(m.format("MMM YYYY"));
+    }
     return result;
 }

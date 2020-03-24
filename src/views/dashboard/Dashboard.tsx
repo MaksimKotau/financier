@@ -1,15 +1,13 @@
 import React, { useState } from 'react'
-import "./styles/dashboardStyles.css";
 import { makeStyles, createStyles, Theme } from '@material-ui/core';
 import WidgetChooser from './WidgetChooser';
 import WidgetFactory from './widgets/WidgetFactory';
-
+import './styles/dashboardStyles.css';
 import { Responsive, WidthProvider, Layouts, Layout } from 'react-grid-layout';
 import AddButton from '../../components/AddButton';
 import { useSelector, useDispatch } from 'react-redux';
 import { GlobalState } from '../../data/reducers';
 import { saveLayouts } from '../../data/actions/dashboardActions';
-import "../../../node_modules/chartist/dist/chartist.css"
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
