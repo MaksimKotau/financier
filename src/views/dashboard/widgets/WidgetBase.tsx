@@ -17,7 +17,7 @@ const CardBase: React.FC<OwnProps> = (props) => {
     const onOpen = (e: any) => setAnchorEl(e.currentTarget) 
     return (
         <div style={{ position: 'relative', height: '100%', width: "100%" }}>
-            <IconButton style={{position: "absolute", top: 5, right: 5}} onClick={onOpen}>
+            <IconButton style={{position: "absolute", top: 0, right: 0}} onClick={onOpen}>
                 <MenuIcon />
             </IconButton>
             <WidgetMenu

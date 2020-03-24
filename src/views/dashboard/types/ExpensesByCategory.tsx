@@ -29,7 +29,10 @@ const ExpensesByCategory: React.FC<OwnProps> = ({ id, type }) => {
                 data={data}
                 options={{
                     maintainAspectRatio: false,
-                    responsive: true
+                    responsive: true,
+                    // legend: {
+                    //     onClick: (e: any, i: any) => console.log(i)
+                    // }
                 }}
             />
         }} />
