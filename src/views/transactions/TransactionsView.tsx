@@ -16,6 +16,7 @@ import TransactionDTO from '../../data/DTO/TransactionDTO';
 import TransactionType from '../../data/enums/TransactionType';
 import { GlobalState } from '../../data/reducers';
 import TransactionFormNew from './form/TransactionForm';
+import _ from 'lodash';
 
 interface TransactionViewType {
     id: string;
@@ -60,13 +61,19 @@ const TransactionView: React.FC = () => {
                     value: el.value,
                     category: foundCategory ? foundCategory.name : "",
                     account: foundAccount ? foundAccount.name : "",
-                    categoryType: transactionType
+                    categoryType: transactionType,
+                    pairTransactionID: el.pairTransactionID
 
                 } as TransactionViewType
             })
     });
-    const onDelete = (transactionID: string) => {
-        deleteCurrentTransaction(transactionID)(dispatch)
+    const onDelete = () => {
+        if (!_.isNil(deleteTransaction)) {
+            if (!_.isNil(deleteTransaction.pairTransactionID)) {
+                deleteCurrentTransaction(deleteTransaction.pairTransactionID)(dispatch)
+            }
+            deleteCurrentTransaction(deleteTransaction.id)(dispatch)
+        }
         setDeleteTransaction(undefined);
     }
     const closeForm = () => {
@@ -84,9 +91,10 @@ const TransactionView: React.FC = () => {
                     { field: "category", title: "Category", defaultGroupOrder: 1 },
                     { field: "account", title: "Wallet" },
                     { field: "name", title: "Name" },
-                    { field: "value", title: "Value" },
+                    { field: "value", title: "Value", type: 'currency' },
                     { field: "date", title: "Date" },
-                    { field: "description", title: "Description" }
+                    { field: "description", title: "Description" },
+                    { field: "pairTransactionID", hidden: true}
                 ]}
                 data={allTransactions}
                 title="Transactions"
@@ -135,7 +143,7 @@ const TransactionView: React.FC = () => {
                 <ModalDialog
                     title="Delete transaction"
                     text={`You want to delete Transaction on "${deleteTransaction.date}" of ${deleteTransaction.value} ?`}
-                    onApply={() => onDelete(deleteTransaction.id)}
+                    onApply={onDelete}
                     onCancel={() => setDeleteTransaction(undefined)}
                 />}
         </div>

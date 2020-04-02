@@ -48,7 +48,7 @@ const CategoryForm: React.FC<OwnProps & StateProps> = (props) => {
     const [canApply, setCanApply] = useState<boolean>(false);
     const [errors, setErrors] = useState<Errors>({ description: "", name: "", type: "" });
     const [validate, setValidate] = useState<boolean>(false);
-    const allCategoriesNames: string[] = useSelector((state: GlobalState) => state.transactionCategories.map(el => el.name));
+    const allCategoriesNames: string[] = useSelector((state: GlobalState) => state.transactionCategories.filter(c => c.id !== props.id).map(el => el.name));
     const { stateCategory } = useSelector((state: GlobalState) => {
         const foundCategory = state.transactionCategories.find(el => el.id === props.id);
         return {
@@ -77,9 +77,9 @@ const CategoryForm: React.FC<OwnProps & StateProps> = (props) => {
         } else {
             modifyTransactionCategory(selectedCategory)(dispatch);
         }
-
         props.onCancel();
     }
+
     const onCancel = () => props.onCancel();
 
     useEffect(() => {
