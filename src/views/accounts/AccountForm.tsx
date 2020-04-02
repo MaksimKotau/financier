@@ -6,8 +6,8 @@ import { addAccount, modifyAccount } from '../../data/actions/accountActions';
 import AccountDTO from '../../data/DTO/AccountDTO';
 import AccountType from '../../data/enums/AccountType';
 import { GlobalState } from '../../data/reducers';
-import { enumToarray } from '../../services/enumToArray';
 import { isPossibleToDeleteAccount } from '../../services/balanceService';
+import { enumToarray } from '../../services/enumToArray';
 
 interface Errors {
     name: string;
@@ -81,6 +81,7 @@ const AccountForm: React.FC<OwnProps & StateProps> = (props) => {
     useEffect(() => {
         if (validate)
             setCanApply(errors.name.length === 0 && errors.balance.length === 0 && errors.type.length === 0);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [errors.name, errors.type, errors.balance, selectedAccount.name, selectedAccount.startBalance, selectedAccount.type])
 
     const modify = (name: keyof AccountDTO, value: any) => {

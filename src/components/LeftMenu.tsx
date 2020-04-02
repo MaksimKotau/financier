@@ -47,7 +47,7 @@ const LeftMenu: React.FC = () => {
                         <ListItemIcon>
                             <CreditCardIcon />
                         </ListItemIcon>
-                        <ListItemText primary="Accounts"/>
+                        <ListItemText primary="Wallets"/>
                     </ListItem>
                 </Link>
                 <Link to="/categories"  className={classes.link}>

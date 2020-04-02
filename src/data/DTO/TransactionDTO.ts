@@ -6,4 +6,5 @@ export default interface TransactionDTO {
   date: string;
   transactionCategoryID: string;
   accountID: string;
+  pairTransactionID?: string;
 }

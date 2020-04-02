@@ -1,8 +1,8 @@
+import { Dialog, List, ListItemText, MenuItem } from '@material-ui/core';
 import React from 'react';
-import { Dialog, ListItem, List, ListItemText, MenuItem } from '@material-ui/core';
-import { widgetDefinitions, WidgetType } from './widgets/widgetDefinitions';
 import { useDispatch } from 'react-redux';
 import { addWidget } from '../../data/actions/dashboardActions';
+import { widgetDefinitions, WidgetType } from './widgets/widgetDefinitions';
 
 interface OwnProps {
     isOpen: boolean;

@@ -99,6 +99,7 @@ const CategoryForm: React.FC<OwnProps & StateProps> = (props) => {
     useEffect(() => {
         if (validate)
             setCanApply(errors.name.length === 0 && errors.description.length === 0 && errors.type.length === 0);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedCategory.name, selectedCategory.description, selectedCategory.type, errors.name, errors.type, errors.description])
     return (
         <Dialog

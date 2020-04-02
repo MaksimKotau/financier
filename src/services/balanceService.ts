@@ -1,10 +1,10 @@
-import moment, { months } from 'moment';
+import _ from 'lodash';
+import moment from 'moment';
 import AccountDTO from "../data/DTO/AccountDTO";
 import TransactionDTO from "../data/DTO/TransactionDTO";
 import AccountType from "../data/enums/AccountType";
 import TransactionType from "../data/enums/TransactionType";
 import { GlobalState, store } from '../data/reducers';
-import _ from 'lodash';
 
 export const calculateCurrentBalance = (accountID: string): number => {
     const state: GlobalState = (store as any).getState();

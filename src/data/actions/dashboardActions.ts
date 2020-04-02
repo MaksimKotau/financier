@@ -1,8 +1,8 @@
+import { Layouts } from "react-grid-layout";
 import { Action } from 'redux';
-import { REMOVE_WIDGET, ADD_WIDGET, SAVE_DASHBOARD_LAYOUT} from './actionTypes';
-import { WidgetType, getWidgetParams, WidgetDefinition } from '../../views/dashboard/widgets/widgetDefinitions';
-import { Layouts, Layout } from "react-grid-layout";
 import uuidv4 from 'uuid/v4';
+import { getWidgetParams, WidgetDefinition, WidgetType } from '../../views/dashboard/widgets/widgetDefinitions';
+import { ADD_WIDGET, REMOVE_WIDGET, SAVE_DASHBOARD_LAYOUT } from './actionTypes';
 
 type Widget = {
     y: number;

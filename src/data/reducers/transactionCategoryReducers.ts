@@ -8,12 +8,12 @@ import TransactionType from "../enums/TransactionType";
 const initialState: TransactionCategoryState = [
     {
         id: uuidv4(),
-        name: "Transit Expenses",
+        name: "Expenses",
         type: TransactionType.TransitExpenses,
     },
     {
         id: uuidv4(),
-        name: "Transit Inome",
+        name: "Inome",
         type: TransactionType.TransitIncome,
     },
 ]
