@@ -72,7 +72,7 @@ const AccountView: React.FC = () => {
         <div className={classes.container}>
             <MaterialTable
                 columns={[
-                    { field: "type", title: "Type", defaultGroupOrder: 0 },
+                    { field: "type", title: "", defaultGroupOrder: 0 },
                     { field: "name", title: "Name" },
                     { field: "currentBalance", title: "Current balance", type: "currency"}
                 ]}
@@ -100,7 +100,8 @@ const AccountView: React.FC = () => {
                     paging: false,
                     actionsColumnIndex: -1,
                     filtering: true,
-                    grouping: true
+                    grouping: true,
+                    groupRowSeparator: " "
                 }}
                 icons={{
                     Filter: forwardRef((props, ref) => <FilterIcon {...props} ref={ref} />),

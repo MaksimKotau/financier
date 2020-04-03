@@ -172,12 +172,16 @@ const TransactionForm: React.FC<OwnProps> = (props) => {
             if (_.isEmpty(selectedTransfer.fromAccountID)) {
                 errors.fromAccountID = "Field is required";
                 noErrors = false;
+            } else if (selectedTransfer.toAccountID === selectedTransfer.fromAccountID) {
+                errors.fromAccountID = "To transfer money, you need to choose different wallets.";
             } else {
                 errors.fromAccountID = "";
             }
             if (_.isEmpty(selectedTransfer.toAccountID)) {
                 errors.toAccountID = "Field is required";
                 noErrors = false;
+            } else if (selectedTransfer.toAccountID === selectedTransfer.fromAccountID) {
+                errors.toAccountID = "To transfer money, you need to choose different wallets.";
             } else {
                 errors.toAccountID = "";
             }

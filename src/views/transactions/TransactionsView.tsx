@@ -87,8 +87,8 @@ const TransactionView: React.FC = () => {
         <div className={classes.container}>
             <MaterialTable
                 columns={[
-                    { field: "categoryType", title: "Category type", defaultGroupOrder: 0 },
-                    { field: "category", title: "Category", defaultGroupOrder: 1 },
+                    { field: "categoryType", title: "", defaultGroupOrder: 0 },
+                    { field: "category", title: "", defaultGroupOrder: 1 },
                     { field: "account", title: "Wallet" },
                     { field: "name", title: "Name" },
                     { field: "value", title: "Value", type: 'currency' },
@@ -124,6 +124,7 @@ const TransactionView: React.FC = () => {
                     paging: false,
                     actionsColumnIndex: -1,
                     filtering: true,
+                    groupRowSeparator: " "
                 }}
                 icons={{
                     Filter: forwardRef((props, ref) => <FilterIcon {...props} ref={ref} />),

@@ -72,7 +72,7 @@ const CategoryView: React.FC = () => {
         <div className={classes.container}>
             <MaterialTable
                 columns={[
-                    { field: "type", title: "Type", defaultGroupOrder: 0 },
+                    { field: "type", title: "", defaultGroupOrder: 0 },
                     { field: "name", title: "Name" },
                     { field: "description", title: "Description" }
                 ]}
@@ -100,6 +100,7 @@ const CategoryView: React.FC = () => {
                     paging: false,
                     actionsColumnIndex: -1,
                     filtering: true,
+                    groupRowSeparator: " "
                 }}
                 icons={{
                     Filter: forwardRef((props, ref) => <FilterIcon {...props} ref={ref} />),

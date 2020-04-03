@@ -60,6 +60,7 @@ const InformationChooser: React.FC<OwnProps> = (props) => {
                         label="Date"
                         required
                         fullWidth
+                        format="DD MMM YYYY"
                         inputVariant="outlined"
                         value={props.transactionType !== "Transfer" ? props.selectedTransaction.date : props.selectedTransfer.date}
                         onChange={(value: MaterialUiPickersDate) => onChange('date', !_.isNil(value) ? value.format("YYYY-MM-DD") : "")}
