@@ -74,7 +74,7 @@ const AccountView: React.FC = () => {
                 columns={[
                     { field: "type", title: "Type", defaultGroupOrder: 0 },
                     { field: "name", title: "Name" },
-                    { field: "currentBalance", title: "Current balance"}
+                    { field: "currentBalance", title: "Current balance", type: "currency"}
                 ]}
                 data={allAccounts}
                 title="Wallets"

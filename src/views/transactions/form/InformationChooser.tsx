@@ -3,6 +3,8 @@ import { AvailableTransactionType, TransferDTO, TransferError, TransactionError 
 import TransactionDTO from '../../../data/DTO/TransactionDTO';
 import { TextField, makeStyles, createStyles, Theme } from '@material-ui/core';
 import _ from 'lodash';
+import { DatePicker } from '@material-ui/pickers';
+import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 
 interface OwnProps {
     transactionType: AvailableTransactionType,
@@ -54,14 +56,13 @@ const InformationChooser: React.FC<OwnProps> = (props) => {
                     />
                 </div>
                 <div style={{ flex: 1, paddingLeft: 5 }}>
-                    <TextField
+                    <DatePicker 
                         label="Date"
                         required
                         fullWidth
-                        variant="outlined"
-                        type="date"
+                        inputVariant="outlined"
                         value={props.transactionType !== "Transfer" ? props.selectedTransaction.date : props.selectedTransfer.date}
-                        onChange={(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => onChange('date', e.target.value)}
+                        onChange={(value: MaterialUiPickersDate) => onChange('date', !_.isNil(value) ? value.format("YYYY-MM-DD") : "")}
                         helperText={!_.isEmpty(props[props.transactionType === "Transfer" ? "transferErrors" : "transactionError"].date) ? props[props.transactionType === "Transfer" ? "transferErrors" : "transactionError"].date : undefined}
                         error={!_.isEmpty(props[props.transactionType === "Transfer" ? "transferErrors" : "transactionError"].date)}
                     />
