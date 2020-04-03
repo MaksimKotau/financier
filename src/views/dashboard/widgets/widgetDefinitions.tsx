@@ -18,7 +18,9 @@ export interface WidgetDefinition {
 
 export enum WidgetType {
     AllExpensesByCategory = 1,
-    AllExpensesByCategoryMonthly = 2
+    AllExpensesByCategoryMonthly = 2,
+    AllIncomesByCategory = 3,
+    AllIncomesByCategoryMonthly = 4
 }
 
 export enum WidgetCategory {
@@ -35,7 +37,7 @@ export const widgetDefinitions: WidgetDefinition[] = [
         icon: <PieChartIcon />,
         widgetType: WidgetType.AllExpensesByCategory,
         widgetCategory: WidgetCategory.Expenses,
-        minHeight: 2,
+        minHeight: 3,
         minWidth: 2,
         width: 3,
         height: 3
@@ -52,7 +54,31 @@ export const widgetDefinitions: WidgetDefinition[] = [
         width: 3,
         height: 3
         
-    }
+    },
+    {
+        title: "All Incomes by category",
+        description: "Incomes for all categories on Pie chart",
+        icon: <PieChartIcon />,
+        widgetType: WidgetType.AllIncomesByCategory,
+        widgetCategory: WidgetCategory.Income,
+        minHeight: 3,
+        minWidth: 3,
+        width: 3,
+        height: 3
+        
+    },
+    {
+        title: "All incomes monthly",
+        description: "Incomes for all Categories monthly",
+        icon: <BarChartIcon />,
+        widgetType: WidgetType.AllIncomesByCategoryMonthly,
+        widgetCategory: WidgetCategory.Income,
+        minHeight: 3,
+        minWidth: 3,
+        width: 3,
+        height: 3
+        
+    },
 ]
 
 export function getWidgetParams(widgetType: WidgetType): undefined | WidgetDefinition{

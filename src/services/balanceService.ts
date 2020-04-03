@@ -57,6 +57,20 @@ export const getAllExpensesByCategories = (startDate: string, endDate: string): 
     return result;
 }
 
+export const getAllIncomesByCategories = (startDate: string, endDate: string): { categoryName: string, value: number }[] => {
+    let result: { categoryName: string, value: number }[] = [];
+    if (!moment(startDate).isValid() || !moment(endDate).isValid() || (moment(endDate).isBefore(moment(startDate))))
+        return result;
+    const state: GlobalState = (store as any).getState();
+    const allIncomesCategories = state.transactionCategories.filter(c => c.type === TransactionType.Income);
+    allIncomesCategories.forEach(c => {
+        const allIncomes = state.transactions.filter(t => t.transactionCategoryID === c.id && moment(t.date).isSameOrAfter(moment(startDate).startOf('day')) && moment(t.date).isSameOrBefore(moment(endDate).endOf('day')));
+        const summ = allIncomes.map(el => el.value).reduce((a, b) => a + b, 0)
+        result.push({ categoryName: c.name, value: summ });
+    })
+    return result;
+}
+
 interface DataRawsPeriodically {
     labels: string[];
     datasets: {
@@ -84,6 +98,34 @@ export const getAllExpensesByCategoriesMonthly = (startDate: string, endDate: st
         const data: number[] = [];
         labels.forEach(l => {
             const dateTransactions = allExpenses.filter(el => _.isEqual(moment(el.date).format('MMM YYYY'), l))
+            const summTransactions = dateTransactions.map(el => el.value).reduce((a, b) => a + b, 0);
+            data.push(summTransactions);
+        })
+        result.datasets = [...result.datasets, {label: c.name, data}]
+    });
+    result.labels = labels;
+    return result;
+}
+
+export const getAllIncomesByCategoriesMonthly = (startDate: string, endDate: string): DataRawsPeriodically => {
+    let result: DataRawsPeriodically = {
+        labels: [],
+        datasets: []
+    };
+    if (!moment(startDate).isValid() || !moment(endDate).isValid() || (moment(endDate).isBefore(moment(startDate))))
+        return result;
+    const state: GlobalState = (store as any).getState();
+    const allIncomesCategories = state.transactionCategories.filter(c => c.type === TransactionType.Income);
+    const labels: string[] = getMonthsRange(startDate, endDate);
+    allIncomesCategories.forEach(c => {
+        const allIncomes = state.transactions.filter(t =>
+            t.transactionCategoryID === c.id &&
+            moment(t.date).isSameOrAfter(moment(startDate).startOf('month')) &&
+            moment(t.date).isSameOrBefore(moment(endDate).endOf('month'))
+        );
+        const data: number[] = [];
+        labels.forEach(l => {
+            const dateTransactions = allIncomes.filter(el => _.isEqual(moment(el.date).format('MMM YYYY'), l))
             const summTransactions = dateTransactions.map(el => el.value).reduce((a, b) => a + b, 0);
             data.push(summTransactions);
         })
