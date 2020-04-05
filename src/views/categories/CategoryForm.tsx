@@ -116,6 +116,7 @@ const CategoryForm: React.FC<OwnProps & StateProps> = (props) => {
                         label="Category Type"
                         fullWidth
                         value={selectedCategory.type}
+                        variant="outlined"
                         select
                         onChange={(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => modify('type', e.target.value)}
                         disabled={!isPossibleToDeleteTransactionCategory(selectedCategory.id)}
@@ -131,6 +132,7 @@ const CategoryForm: React.FC<OwnProps & StateProps> = (props) => {
                     <TextField
                         label="Category name"
                         fullWidth
+                        variant="outlined"
                         value={selectedCategory.name}
                         onChange={(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => modify('name', e.target.value)}
                         error={errors.name.length > 0}
@@ -141,6 +143,7 @@ const CategoryForm: React.FC<OwnProps & StateProps> = (props) => {
                     <TextField
                         label="Description"
                         fullWidth
+                        variant="outlined"
                         multiline
                         rows={3}
                         value={selectedCategory.description}

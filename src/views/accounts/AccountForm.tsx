@@ -8,6 +8,8 @@ import AccountType from '../../data/enums/AccountType';
 import { GlobalState } from '../../data/reducers';
 import { isPossibleToDeleteAccount } from '../../services/balanceService';
 import { enumToarray } from '../../services/enumToArray';
+import NumberFormatter from '../../components/NumberFormatter';
+import _ from 'lodash';
 
 interface Errors {
     name: string;
@@ -116,6 +118,7 @@ const AccountForm: React.FC<OwnProps & StateProps> = (props) => {
                         select
                         onChange={(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => modify('type', e.target.value)}
                         disabled={!isPossibleToDeleteAccount(selectedAccount.id)}
+                        variant="outlined"
                     >
                         {enumToarray(AccountType).map(el => {
                             return (
@@ -127,6 +130,7 @@ const AccountForm: React.FC<OwnProps & StateProps> = (props) => {
                 <div className={classes.paddingBlock}>
                     <TextField
                         label="Wallet name"
+                        variant="outlined"
                         fullWidth
                         value={selectedAccount.name}
                         onChange={(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => modify('name', e.target.value)}
@@ -137,10 +141,13 @@ const AccountForm: React.FC<OwnProps & StateProps> = (props) => {
                 <div className={classes.paddingBlock}>
                     <TextField
                         label="Start balance"
+                        variant="outlined"
                         fullWidth
-                        type="number"
-                        value={selectedAccount.startBalance}
-                        onChange={(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => modify('startBalance', parseFloat(e.target.value))}
+                        value={selectedAccount.startBalance === 0 ? undefined : selectedAccount.startBalance}
+                        onChange={(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => modify('startBalance', _.isNil(e.target.value) ? 0 : e.target.value)}
+                        InputProps={{
+                            inputComponent: NumberFormatter
+                        }}
                     />
                 </div>
             </DialogContent>

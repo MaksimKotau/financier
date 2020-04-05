@@ -5,6 +5,7 @@ import { TextField, makeStyles, createStyles, Theme } from '@material-ui/core';
 import _ from 'lodash';
 import { DatePicker } from '@material-ui/pickers';
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
+import NumberFormatter from '../../../components/NumberFormatter';
 
 interface OwnProps {
     transactionType: AvailableTransactionType,
@@ -48,15 +49,19 @@ const InformationChooser: React.FC<OwnProps> = (props) => {
                         required
                         fullWidth
                         variant="outlined"
-                        type="number"
-                        value={props.transactionType !== "Transfer" ? props.selectedTransaction.value : props.selectedTransfer.value}
-                        onChange={(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => onChange('value', _.isEmpty(e.target.value) ? 0 : parseFloat(e.target.value))}
+                        value={props.transactionType !== "Transfer" ? (props.selectedTransaction.value === 0 ? undefined : props.selectedTransaction.value) : (props.selectedTransfer.value === 0 ? undefined : props.selectedTransfer.value)}
+                        onChange={(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+                            onChange('value', _.isNil(e.target.value) ? 0 : e.target.value)
+                        }}
                         helperText={!_.isEmpty(props[props.transactionType === "Transfer" ? "transferErrors" : "transactionError"].value) ? props[props.transactionType === "Transfer" ? "transferErrors" : "transactionError"].value : undefined}
                         error={!_.isEmpty(props[props.transactionType === "Transfer" ? "transferErrors" : "transactionError"].value)}
+                        InputProps={{
+                            inputComponent: NumberFormatter
+                        }}
                     />
                 </div>
                 <div style={{ flex: 1, paddingLeft: 5 }}>
-                    <DatePicker 
+                    <DatePicker
                         label="Date"
                         required
                         fullWidth
