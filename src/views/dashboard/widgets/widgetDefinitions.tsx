@@ -82,7 +82,7 @@ export const widgetDefinitions: WidgetDefinition[] = [
         height: 3
     },
     {
-        title: "All debit wallets balance",
+        title: "Balance of all debit wallets",
         description: "Balance of all wallets of type Debit",
         icon: <PieChartIcon />,
         widgetType: WidgetType.AllDebitAccountsBalance,
@@ -93,7 +93,7 @@ export const widgetDefinitions: WidgetDefinition[] = [
         height: 3
     },
     {
-        title: "All credit wallets balance",
+        title: "Balance of all credit wallets",
         description: "Balance of all wallets of type Credit",
         icon: <PieChartIcon />,
         widgetType: WidgetType.AllCreditAccountsBalance,
