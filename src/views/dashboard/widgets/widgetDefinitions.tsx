@@ -20,7 +20,10 @@ export enum WidgetType {
     AllExpensesByCategory = 1,
     AllExpensesByCategoryMonthly = 2,
     AllIncomesByCategory = 3,
-    AllIncomesByCategoryMonthly = 4
+    AllIncomesByCategoryMonthly = 4,
+    AllDebitAccountsBalance = 5,
+    AllCreditAccountsBalance = 6,
+    AllIncomeExpensesCompareMonthly = 7
 }
 
 export enum WidgetCategory {
@@ -77,7 +80,39 @@ export const widgetDefinitions: WidgetDefinition[] = [
         minWidth: 3,
         width: 3,
         height: 3
-        
+    },
+    {
+        title: "All debit wallets balance",
+        description: "Balance of all wallets of type Debit",
+        icon: <PieChartIcon />,
+        widgetType: WidgetType.AllDebitAccountsBalance,
+        widgetCategory: WidgetCategory.Accounts,
+        minHeight: 3,
+        minWidth: 3,
+        width: 3,
+        height: 3
+    },
+    {
+        title: "All credit wallets balance",
+        description: "Balance of all wallets of type Credit",
+        icon: <PieChartIcon />,
+        widgetType: WidgetType.AllCreditAccountsBalance,
+        widgetCategory: WidgetCategory.Accounts,
+        minHeight: 3,
+        minWidth: 3,
+        width: 3,
+        height: 3
+    },
+    {
+        title: "All income/expenses monthly",
+        description: "Compare all Incomes and Expenses monthly",
+        icon: <BarChartIcon />,
+        widgetType: WidgetType.AllIncomeExpensesCompareMonthly,
+        widgetCategory: WidgetCategory.Planning,
+        minHeight: 3,
+        minWidth: 3,
+        width: 3,
+        height: 3
     },
 ]
 

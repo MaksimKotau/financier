@@ -4,6 +4,9 @@ import CurrectExpensesByCategory from '../types/ExpensesByCategory';
 import ExpensesByCategoryMonthly from '../types/ExpensesByCategoryMonthly';
 import IncomesByCategory from '../types/IncomesByCategory';
 import IncomesByCategoryMonthly from '../types/IncomesByCategoryMonthly';
+import AllDebitAccounts from '../types/AllDebitAccounts';
+import AllCreditAccounts from '../types/AllCreditAccounts';
+import AllIncomeExpensesMonthly from '../types/AllIncomeExpensesMonthly';
 
 interface OwnProps {
     type: WidgetType;
@@ -20,6 +23,12 @@ const WidgetFactory: React.FC<OwnProps> = (props) => {
             return <IncomesByCategory {...props} />
         case WidgetType.AllIncomesByCategoryMonthly:
             return <IncomesByCategoryMonthly {...props} />
+        case WidgetType.AllDebitAccountsBalance:
+            return <AllDebitAccounts {...props} />
+        case WidgetType.AllCreditAccountsBalance:
+            return <AllCreditAccounts {...props} />
+        case WidgetType.AllIncomeExpensesCompareMonthly:
+            return <AllIncomeExpensesMonthly {...props} />  
         default:
             return null;
     }

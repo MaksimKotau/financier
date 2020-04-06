@@ -5,6 +5,7 @@ import accounts, { AccountState } from './accountReducers';
 import transactionCategories, { TransactionCategoryState } from './transactionCategoryReducers';
 import transactions, { TransactionState } from './transactionReducers';
 import dashboard, { DashboardState } from './dashboardReducers';
+import { composeWithDevTools } from 'redux-devtools-extension';
 
 const rootPersistConfig = {
   key: 'root',
@@ -30,6 +31,6 @@ export const rootReducer =  combineReducers<GlobalState, any>({
 
 const persistedReducer = persistReducer(rootPersistConfig, rootReducer)
 
-export const store = createStore<GlobalState, any, null, null>(persistedReducer as any);
+export const store = createStore<GlobalState, any, null, null>(persistedReducer as any,  composeWithDevTools());
 
 export const persistor = persistStore(store)

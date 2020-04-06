@@ -71,7 +71,7 @@ export const getAllIncomesByCategories = (startDate: string, endDate: string): {
     return result;
 }
 
-interface DataRawsPeriodically {
+export interface DataRawsPeriodically {
     labels: string[];
     datasets: {
         label: string,
@@ -131,6 +131,28 @@ export const getAllIncomesByCategoriesMonthly = (startDate: string, endDate: str
         })
         result.datasets = [...result.datasets, {label: c.name, data}]
     });
+    result.labels = labels;
+    return result;
+}
+
+export const getAllTransactionsMonthly = (startDate: string, endDate: string, type: TransactionType): DataRawsPeriodically => {
+    let result: DataRawsPeriodically = {
+        labels: [],
+        datasets: []
+    };
+    if (!moment(startDate).isValid() || !moment(endDate).isValid() || (moment(endDate).isBefore(moment(startDate))))
+        return result;
+    const state: GlobalState = (store as any).getState();
+    const labels: string[] = getMonthsRange(startDate, endDate);
+    const categoriesID = state.transactionCategories.filter(el => el.type === type).map(t => t.id);
+    const allTransactions = state.transactions.filter(el => categoriesID.includes(el.transactionCategoryID));
+    const data: number[] = [];
+    labels.forEach(l => {
+        const dateTransactions = allTransactions.filter(el => _.isEqual(moment(el.date).format('MMM YYYY'), l))
+        const summTransactions = dateTransactions.map(el => el.value).reduce((a, b) => a + b, 0);
+        data.push(summTransactions);
+    })
+    result.datasets = [...result.datasets, {label: TransactionType[type], data}]
     result.labels = labels;
     return result;
 }
