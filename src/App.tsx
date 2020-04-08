@@ -14,7 +14,7 @@ import MomentUtils from '@date-io/moment';
 const theme = createMuiTheme({
   palette: {
     primary: {
-      main: "#558b2f"
+      main: "#099e00"
     },
     secondary: {
       main: "#ff8f00"
