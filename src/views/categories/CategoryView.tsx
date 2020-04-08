@@ -100,7 +100,8 @@ const CategoryView: React.FC = () => {
                     paging: false,
                     actionsColumnIndex: -1,
                     filtering: true,
-                    groupRowSeparator: " "
+                    groupRowSeparator: " ",
+                    defaultExpanded: true
                 }}
                 icons={{
                     Filter: forwardRef((props, ref) => <FilterIcon {...props} ref={ref} />),

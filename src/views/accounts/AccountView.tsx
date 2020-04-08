@@ -100,8 +100,8 @@ const AccountView: React.FC = () => {
                     paging: false,
                     actionsColumnIndex: -1,
                     filtering: true,
-                    grouping: true,
-                    groupRowSeparator: " "
+                    groupRowSeparator: " ",
+                    defaultExpanded: true
                 }}
                 icons={{
                     Filter: forwardRef((props, ref) => <FilterIcon {...props} ref={ref} />),

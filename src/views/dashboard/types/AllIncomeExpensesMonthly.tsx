@@ -5,7 +5,7 @@ import { getAllTransactionsMonthly, DataRawsPeriodically } from '../../../servic
 import TransactionType from '../../../data/enums/TransactionType';
 import moment from 'moment';
 import CardBase from '../widgets/WidgetBase';
-import { Bar, Line } from 'react-chartjs-2';
+import { Line } from 'react-chartjs-2';
 
 interface OwnProps {
     id: string;
