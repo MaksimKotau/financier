@@ -9,7 +9,7 @@ interface OwnProps {
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
-            position: "absolute",
+            position: "fixed",
             right: 50,
             bottom: 50
         }
