@@ -1,9 +1,10 @@
 import { ADD_TRANSACTION, DELETE_TRANSACTION, MODIFY_TRANSACTION } from "../actions/actionTypes";
 import { AddTransactionAction, DeleteTransactionAction, ModifyTransactionAction } from '../actions/transactionActions';
 import TransactionDTO from "../DTO/TransactionDTO";
+import {getTransactions} from './transactionsService';
 
 
-const initialState: TransactionState = []
+const initialState: TransactionState = getTransactions();
 
 type ActionType = AddTransactionAction | ModifyTransactionAction | DeleteTransactionAction;
 const ensureNever = (action: never) => action;
