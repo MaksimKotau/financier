@@ -1,9 +1,10 @@
 import { Dialog, List, ListItemText, MenuItem, CardHeader, useTheme, ListItemIcon, ListSubheader, makeStyles, Theme, createStyles, Paper, Typography } from '@material-ui/core';
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addWidget } from '../../data/actions/dashboardActions';
 import { widgetDefinitions, WidgetType, WidgetCategory } from './widgets/widgetDefinitions';
 import _ from 'lodash';
+import { GlobalState } from '../../data/reducers';
 
 interface OwnProps {
     isOpen: boolean;
@@ -29,6 +30,7 @@ const useStyles = makeStyles((theme: Theme) =>
 const WidgetChooser: React.FC<OwnProps> = (props) => {
     const theme = useTheme();
     const classes = useStyles();
+    const alreadyAddedWidgetTypes = useSelector((state: GlobalState) => state.dashboard.widgetTypes.map(el => el.type));
     const allWidgets = _.groupBy(widgetDefinitions, 'widgetCategory');
     const dispatch = useDispatch();
     const onClick = (event: any, index: WidgetType) => {
@@ -60,6 +62,7 @@ const WidgetChooser: React.FC<OwnProps> = (props) => {
                                                 key={`${category}_${i}`}
                                                 itemID={el.widgetType.toString()}
                                                 onClick={(event: any) => onClick(event, el.widgetType)}
+                                                disabled={alreadyAddedWidgetTypes.includes(el.widgetType)}
                                             >
                                                 <ListItemIcon>
                                                     {el.icon}
@@ -67,7 +70,6 @@ const WidgetChooser: React.FC<OwnProps> = (props) => {
                                                 <ListItemText
                                                     primary={el.title}
                                                     secondary={el.description}
-
                                                 />
                                             </MenuItem>
                                         )
