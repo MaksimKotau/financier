@@ -53,6 +53,11 @@ export const getCategories = (): TransactionCategoryState => [
         type: TransactionType.Expenses
     },
     {
+        id: "07151ffb-f5ec-499d-a4ed-f276408bddb8",
+        name: "Loans",
+        type: TransactionType.Expenses
+    },
+    {
         id: "2eff0a62-be18-4538-98d9-2c3a97247a56",
         name: "Other",
         type: TransactionType.Expenses,
@@ -77,5 +82,4 @@ export const getCategories = (): TransactionCategoryState => [
         name: "Other",
         type: TransactionType.Income
     }
-
 ] 
