@@ -50,10 +50,11 @@ export const getAllExpensesByCategories = (startDate: string, endDate: string): 
     const state: GlobalState = (store as any).getState();
     const allExpensesCategories = state.transactionCategories.filter(c => c.type === TransactionType.Expenses);
     allExpensesCategories.forEach(c => {
-        const allExpenses = state.transactions.filter(t => t.transactionCategoryID === c.id && moment(t.date).isSameOrAfter(moment(startDate).startOf('day')) && moment(t.date).isSameOrBefore(moment(endDate).endOf('day')));
+        const allExpenses = state.transactions.filter(t => (t.transactionCategoryID === c.id || t.calculateTransferForCategoryID === c.id) && moment(t.date).isSameOrAfter(moment(startDate).startOf('day')) && moment(t.date).isSameOrBefore(moment(endDate).endOf('day')));
         const summ = allExpenses.map(el => el.value).reduce((a, b) => a + b, 0)
         result.push({ categoryName: c.name, value: summ });
     })
+
     return result;
 }
 
@@ -91,7 +92,7 @@ export const getAllExpensesByCategoriesMonthly = (startDate: string, endDate: st
     const labels: string[] = getMonthsRange(startDate, endDate);
     allExpensesCategories.forEach(c => {
         const allExpenses = state.transactions.filter(t =>
-            t.transactionCategoryID === c.id &&
+            (t.transactionCategoryID === c.id || t.calculateTransferForCategoryID === c.id) &&
             moment(t.date).isSameOrAfter(moment(startDate).startOf('month')) &&
             moment(t.date).isSameOrBefore(moment(endDate).endOf('month'))
         );
@@ -145,7 +146,7 @@ export const getAllTransactionsMonthly = (startDate: string, endDate: string, ty
     const state: GlobalState = (store as any).getState();
     const labels: string[] = getMonthsRange(startDate, endDate);
     const categoriesID = state.transactionCategories.filter(el => el.type === type).map(t => t.id);
-    const allTransactions = state.transactions.filter(el => categoriesID.includes(el.transactionCategoryID));
+    const allTransactions = state.transactions.filter(el => categoriesID.includes(el.transactionCategoryID) || (!_.isNil(el.calculateTransferForCategoryID) && categoriesID.includes(el.calculateTransferForCategoryID)));
     const data: number[] = [];
     labels.forEach(l => {
         const dateTransactions = allTransactions.filter(el => _.isEqual(moment(el.date).format('MMM YYYY'), l))

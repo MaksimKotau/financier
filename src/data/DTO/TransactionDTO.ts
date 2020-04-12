@@ -7,4 +7,5 @@ export default interface TransactionDTO {
   transactionCategoryID: string;
   accountID: string;
   pairTransactionID?: string;
+  calculateTransferForCategoryID?: string;
 }

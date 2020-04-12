@@ -23,6 +23,7 @@ export interface TransferDTO {
     date: string;
     name?: string;
     description?: string;
+    calculateTransferForCategoryID?: string;
 }
 
 export interface TransactionError {
@@ -159,9 +160,12 @@ const TransactionForm: React.FC<OwnProps> = (props) => {
                 toAccountID: stateIncomeTransfer.accountID,
                 value: stateIncomeTransfer.value,
                 description: stateIncomeTransfer.description,
-                name: stateIncomeTransfer.name
+                name: stateIncomeTransfer.name,
+                calculateTransferForCategoryID: stateExpenseTransfer.calculateTransferForCategoryID
             })
             setTransactionType("Transfer")
+        } else {
+            setSelectedTransfer({ fromAccountID: "", toAccountID: "", name: "", date: moment().format("YYYY-MM-DD"), value: 0, description: "" })
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.open]);
@@ -209,8 +213,8 @@ const TransactionForm: React.FC<OwnProps> = (props) => {
     }, [selectedTransfer.fromAccountID, selectedTransfer.toAccountID, selectedTransfer.value, selectedTransfer.date, transactionType])
     const onApply = () => {
         if (transactionType === "Transfer") {
-            const fromTransactionID = uuidv4();
-            const toTransactionID = uuidv4();
+            const fromTransactionID = _.isEmpty(props.id) ? uuidv4() : (!_.isNil(stateExpenseTransfer) ? stateExpenseTransfer.id : "");
+            const toTransactionID = _.isEmpty(props.id) ? uuidv4() : (!_.isNil(stateIncomeTransfer) ? stateIncomeTransfer.id : "");
             let fromTransaction: TransactionDTO = {
                 id: fromTransactionID,
                 date: selectedTransfer.date,
@@ -219,7 +223,8 @@ const TransactionForm: React.FC<OwnProps> = (props) => {
                 transactionCategoryID: transitExpensesCategory.id,
                 value: selectedTransfer.value,
                 description: selectedTransfer.description,
-                pairTransactionID: toTransactionID
+                pairTransactionID: toTransactionID,
+                calculateTransferForCategoryID: selectedTransfer.calculateTransferForCategoryID
             };
 
             //To transaction
@@ -233,8 +238,13 @@ const TransactionForm: React.FC<OwnProps> = (props) => {
                 description: selectedTransfer.description,
                 pairTransactionID: fromTransactionID
             };
-            addTransaction(fromTransaction)(dispatch);
-            addTransaction(toTransaction)(dispatch);
+            if (_.isEmpty(props.id)) {
+                addTransaction(fromTransaction)(dispatch);
+                addTransaction(toTransaction)(dispatch);
+            } else {
+                modifyTransaction(fromTransaction)(dispatch);
+                modifyTransaction(toTransaction)(dispatch);
+            }
         } else {
             if (_.isEmpty(props.id)) {
                 addTransaction(selectedTransaction)(dispatch)

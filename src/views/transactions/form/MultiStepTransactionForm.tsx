@@ -57,7 +57,7 @@ interface OwnProps {
 
 const getSteps = (type: AvailableTransactionType) => {
     if (type === "Transfer")
-        return ['Type', 'Wallet', 'Information'];
+        return ['Type', 'Wallet', 'Category', 'Information'];
     return ['Type', 'Category', 'Wallet', 'Information'];
 }
 
@@ -97,6 +97,8 @@ const MultiStepTransactionForm: React.FC<OwnProps> = (props) => {
                     onSelectedTransactionChange={props.onTransactionChange}
                     transactionType={props.transactionType}
                     transactionErrors={props.transactionErrors}
+                    selectedTransfer={props.transfer}
+                    onSelectedTransferChange={props.onTransferChange}
                 />;
             case "Wallet":
                 return <WalletChooser
