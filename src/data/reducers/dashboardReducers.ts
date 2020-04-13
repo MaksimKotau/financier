@@ -2,21 +2,23 @@ import { ADD_WIDGET, REMOVE_WIDGET, SAVE_DASHBOARD_LAYOUT } from "../actions/act
 import { Layouts, Layout } from "react-grid-layout";
 import { WidgetType } from "../../views/dashboard/widgets/widgetDefinitions";
 import { AddWidgetAction, RemoveWidgetAction, SaveDashboardLayoutAction } from '../actions/dashboardActions';
-
+import {getDashboard} from './dashboardService';
 export const availableLayoutBreakpoint = ["lg", "md", "sm", "xs", "xxs"];
 
-const defaultLayout = [] as Layout[];
+//const defaultLayout = [] as Layout[];
 
-const initialState: DashboardState = {
-    layouts: {
-        lg: defaultLayout, 
-        md: defaultLayout, 
-        sm: defaultLayout, 
-        xs: defaultLayout, 
-        xxs: defaultLayout
-    },
-    widgetTypes: [] as WidgetTypeAssignation[]
-}
+const initialState: DashboardState = getDashboard();
+
+// {
+//     layouts: {
+//         lg: defaultLayout, 
+//         md: defaultLayout, 
+//         sm: defaultLayout, 
+//         xs: defaultLayout, 
+//         xxs: defaultLayout
+//     },
+//     widgetTypes: [] as WidgetTypeAssignation[]
+// }
 
 type ActionType = AddWidgetAction | RemoveWidgetAction | SaveDashboardLayoutAction;
 const ensureNever = (action: never) => action;
