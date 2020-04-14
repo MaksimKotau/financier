@@ -12,7 +12,7 @@ describe('accountReducers', () => {
         const currentAccount: AccountDTO = { id: currentAccountID, name: "Name", type: AccountType.Credit, startBalance: 0 };
         const currentAction: AddAccountAction = { type: constants.ADD_ACCOUNT, account: currentAccount };
         const expectedState = [currentAccount];
-        expect(accountReducer(undefined, currentAction)).toEqual(expectedState);
+        expect(accountReducer([], currentAction)).toEqual(expectedState);
     })
     it('should return state with modified account', () => {
         const date = "2020-08-16";

@@ -11,7 +11,7 @@ describe('transactionCategoryReducers', () => {
         const transactionCategoryID: string = uuidv4();
         const currentTransactionCategory: TransactionCategoryDTO = { id: transactionCategoryID, name: "Name", type: TransactionType.Income};
         const currentAction: AddTransactionCategoryAction = { type: constants.ADD_TRANSACTION_CATEGORY, transactionCategory: currentTransactionCategory };
-        expect(transactionCategoryReducer(undefined, currentAction)[2]).toEqual(currentTransactionCategory);
+        expect(transactionCategoryReducer([], currentAction)[0]).toEqual(currentTransactionCategory);
     })
     it('should return state with modified TransactionCategory', () => {
         const transactionCategoryID: string = uuidv4();
