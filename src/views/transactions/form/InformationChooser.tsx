@@ -56,7 +56,7 @@ const InformationChooser: React.FC<OwnProps> = (props) => {
                         helperText={!_.isEmpty(props[props.transactionType === "Transfer" ? "transferErrors" : "transactionError"].value) ? props[props.transactionType === "Transfer" ? "transferErrors" : "transactionError"].value : undefined}
                         error={!_.isEmpty(props[props.transactionType === "Transfer" ? "transferErrors" : "transactionError"].value)}
                         InputProps={{
-                            inputComponent: NumberFormatter
+                            inputComponent: NumberFormatter as any
                         }}
                     />
                 </div>
