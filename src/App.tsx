@@ -1,7 +1,7 @@
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import React from 'react';
 import { Provider } from 'react-redux';
-import { BrowserRouter as Router } from "react-router-dom";
+import { HashRouter as Router } from "react-router-dom";
 import { PersistGate } from 'redux-persist/integration/react';
 import LeftMenu from './components/LeftMenu';
 import Toolbar from './components/Toolbar';
